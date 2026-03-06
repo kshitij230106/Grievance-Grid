@@ -6,10 +6,10 @@ exports.createGrievance = (req, res) => {
     return res.status(400).json({ message: "Request body missing" });
   }
 
-  const { title, description } = req.body;
+  const { title, description, location, photo } = req.body;
 
-  if (!title || !description) {
-    return res.status(400).json({ message: "Title and description required" });
+  if (!title || !description || !location) {
+    return res.status(400).json({ message: "Title, description and location required" });
   }
 
   const newGrievance = {
@@ -17,7 +17,10 @@ exports.createGrievance = (req, res) => {
     userId: req.user.id,
     title,
     description,
-    status: "Pending"
+    location,
+    photo,
+    status: "Pending",
+    createdAt: new Date()
   };
 
   grievances.push(newGrievance);
