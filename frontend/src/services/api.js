@@ -19,7 +19,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const createGrievance = async (title, description, location) => {
-  const response = await fetch("http://localhost:5000/api/grievances", {
+  const response = await fetch(`${BASE_URL}/api/grievances`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -14,11 +14,10 @@ function Login({ onLogin }) {
       if (data.token) {
         localStorage.setItem("token", data.token);
         alert("Login Successful");
-        onLogin(); // notify App.js that user logged in
+        onLogin();
       } else {
         alert(data.message || "Login failed");
       }
-
     } catch (error) {
       console.error("Login error:", error);
       alert("Login failed. Please check credentials.");
@@ -26,33 +25,43 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <>
+      <div className="auth-header">
+        <div className="auth-logo">G</div>
+        <h1>Welcome back</h1>
+        <p className="page-tagline">Sign in to your Grievance Grid account</p>
+      </div>
 
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <div className="form-group">
+          <label htmlFor="login-email">Email</label>
+          <input
+            id="login-email"
+            type="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
 
-        <br /><br />
+        <div className="form-group">
+          <label htmlFor="login-password">Password</label>
+          <input
+            id="login-password"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-
-        <br /><br />
-
-        <button type="submit">Login</button>
+        <button type="submit" className="btn btn-block btn-lg">
+          Login
+        </button>
       </form>
-    </div>
+    </>
   );
 }
 
