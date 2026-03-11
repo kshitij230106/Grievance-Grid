@@ -78,7 +78,8 @@ function CreateGrievance() {
               type="text"
               placeholder="Link or address (use Detect Location for coordinates)"
               value={location}
-              readOnly
+              //readOnly
+              onChange={(e) => setLocation(e.target.value)}
             />
             <button type="button" onClick={detectLocation} className="btn btn-outline">
               Detect Location

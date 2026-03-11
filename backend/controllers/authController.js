@@ -1,3 +1,5 @@
+
+const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -13,56 +15,57 @@ password: "$2b$10$QqjK7F2Yq1mV2vL0k9nH8uPqP1GkXz1eYz7pT4dX3a5yJmFvE0x6C"
 
 // REGISTER USER
 exports.registerUser = async (req, res) => {
-  try {
 
-    const { name, email, password } = req.body;
+  const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "All fields required" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const sql = `
+    INSERT INTO users (name, email, password)
+    VALUES (?, ?, ?)
+  `;
+
+  db.query(sql, [name, email, hashedPassword], (err, result) => {
+
+    if (err) {
+      console.log("REGISTER ERROR:", err);
+      return res.status(500).json({ error: err });
     }
-
-    // Check if user already exists
-    const userExists = users.find(user => user.email === email);
-
-    if (userExists) {
-      return res.status(400).json({ message: "User already exists" });
-    }
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = {
-      id: Date.now(),
-      name,
-      email,
-      password: hashedPassword,
-      role: "user"
-    };
-
-    users.push(newUser);
 
     res.json({
-      message: "User registered successfully",
-      user: { name, email }
+      message: "User registered successfully"
     });
 
-  } catch (error) {
-    res.status(500).json({ error: "Something went wrong" });
-  }
+  });
+
 };
 
 
 // LOGIN USER
 exports.loginUser = async (req, res) => {
-  try {
 
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    const user = users.find(user => user.email === email);
+  const sql = `
+    SELECT * FROM users WHERE email = ?
+  `;
 
-    if (!user) {
+  db.query(sql, [email], async (err, results) => {
+
+    if (err) {
+      console.log("REGISTER ERROR:", err);
+      return res.status(500).json({ error: err });
+    }
+
+    if (results.length === 0) {
       return res.status(400).json({ message: "User not found" });
     }
+
+    const user = results[0];
 
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -81,7 +84,6 @@ exports.loginUser = async (req, res) => {
       token
     });
 
-  } catch (error) {
-    res.status(500).json({ error: "Login failed" });
-  }
+  });
+
 };

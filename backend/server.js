@@ -1,13 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 
+require("./config/db");
+
 const app = express();
 
 
 
 
 // Middleware
-app.use(cors());
+//app.use(cors());
+
+//Temp fix for CORS issues during development - allow all origins (not recommended for production)
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(express.json());
 
 const grievanceRoutes = require("./routes/grievanceRoutes");
@@ -27,8 +37,8 @@ app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
 
-const express = require("express");
-const cors = require("cors");
+//const express = require("express");
+//const cors = require("cors");
 
 const { authMiddleware, adminMiddleware } = require("./middleware/authMiddleware");
 

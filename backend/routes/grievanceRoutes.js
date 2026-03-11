@@ -18,4 +18,9 @@ router.get("/my", authMiddleware, getMyGrievances);
 // Admin: Get all grievances
 router.get("/", authMiddleware, adminMiddleware, getAllGrievances);
 
+// TEMP: remove auth middleware while testing
+//router.post("/", createGrievance);
+//router.get("/my", getMyGrievances);
+//router.get("/", getAllGrievances);
+
 module.exports = router;
